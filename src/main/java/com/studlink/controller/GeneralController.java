@@ -16,15 +16,16 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class GeneralController {
 
-    private String checkIfLogged(HttpSession ssn, String ifTrue, String ifFalse){
-        if (ssn!=null && ssn.getAttribute("user") != null)
+    private String checkIfLogged(HttpSession ssn, String ifTrue, String ifFalse) {
+        if (ssn != null && ssn.getAttribute("user") != null)
             return ifTrue;
         return ifFalse;
     }
+
     @RequestMapping("/")
     public String nothing(HttpServletRequest request,
                           HttpServletResponse response,
-                          @ModelAttribute("user")User user,
+                          @ModelAttribute("user") User user,
                           Model model) {
         return checkIfLogged(request.getSession(), "home", "index");
     }
@@ -32,7 +33,7 @@ public class GeneralController {
     @RequestMapping("home")
     public String home(HttpServletRequest request,
                        HttpServletResponse response,
-                       @ModelAttribute("user")User user,
+                       @ModelAttribute("user") User user,
                        Model model) {
         return checkIfLogged(request.getSession(), "home", "index");
     }
@@ -40,21 +41,21 @@ public class GeneralController {
     @RequestMapping("index")
     public String index(HttpServletRequest request,
                         HttpServletResponse response,
-                        @ModelAttribute("user")User user,
-                        Model model){
+                        @ModelAttribute("user") User user,
+                        Model model) {
         return checkIfLogged(request.getSession(), "home", "index");
     }
 
     @RequestMapping("about")
     public String about(HttpServletRequest request,
                         HttpServletResponse response,
-                        @ModelAttribute("user")User user,
-                        Model model){
+                        @ModelAttribute("user") User user,
+                        Model model) {
         return checkIfLogged(request.getSession(), "about", "info");
     }
 
     @RequestMapping("info")
-    public String info(){
+    public String info() {
         return "info";
     }
 
@@ -63,11 +64,4 @@ public class GeneralController {
         return "id";
     }
 
-    @RequestMapping("/profile")
-    public String profile (HttpServletRequest request,
-                           HttpServletResponse response,
-                           @ModelAttribute("user")User user,
-                           Model model) {
-        return checkIfLogged(request.getSession(), "profile", "login");
-    }
 }

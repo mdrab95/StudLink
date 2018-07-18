@@ -75,7 +75,7 @@ public class ResetPasswordController {
             modelAndView.addObject("confirmationMessage", "Check your email.");
         }
 
-        modelAndView.setViewName("reset2");
+        modelAndView.setViewName("checkyouremail");
 
         return modelAndView;
     }

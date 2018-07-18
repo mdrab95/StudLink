@@ -29,12 +29,6 @@ public class LoginController {
         this.userService = userService;
     }
 
-    private String checkIfLogged(HttpSession ssn, String ifTrue, String ifFalse){
-        if (ssn!=null && ssn.getAttribute("user") != null)
-            return ifTrue;
-        return ifFalse;
-    }
-
 
     @RequestMapping("login")
     public String login(@ModelAttribute("user")User user) {

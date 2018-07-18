@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+    <title>StudLink - reset your password</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-4 col-md-offset-4">
+        <form method="post" th:action="@{/access}" th:object="${user}">
+            <h3>Reset your password</h3>
+            <hr/>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" placeholder="Email" class="form-control" th:field="*{email}"/>
+            </div>
+            <div class="form-group">
+                <form action="checkyouremail.html">
+                    <button class="btn btn-success" type="submit">Reset</button>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
