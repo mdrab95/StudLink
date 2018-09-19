@@ -46,19 +46,6 @@ public class GeneralController {
         return checkIfLogged(request.getSession(), "home", "index");
     }
 
-    @RequestMapping("about")
-    public String about(HttpServletRequest request,
-                        HttpServletResponse response,
-                        @ModelAttribute("user") User user,
-                        Model model) {
-        return checkIfLogged(request.getSession(), "about", "info");
-    }
-
-    @RequestMapping("info")
-    public String info() {
-        return "info";
-    }
-
     @RequestMapping("/api/id")
     public String userId() {
         return "id";

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -78,17 +80,21 @@ public class RegisterController {
 
             String appUrl = request.getScheme() + "://" + request.getServerName();
 
+            String emailBody = "Hello " + user.getFirstName() + ",\n"
+                    + "Thank you for registering to the Studlink. Please confirm your e-mail address by clicking the link below:\n"
+                    + appUrl + ":8080/confirm?token=" + user.getConfirmationToken()
+                    + "\nIf you did not sign up for this account, just ignore this message. \n "
+                    + "\nThis is an automated email. Please do not reply to it. ";
+
             SimpleMailMessage registrationEmail = new SimpleMailMessage();
             registrationEmail.setTo(user.getEmail());
-            registrationEmail.setSubject("Registration Confirmation");
-            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + ":8080/confirm?token=" + user.getConfirmationToken());
+            registrationEmail.setSubject("Studlink registration confirmation");
+            registrationEmail.setText(emailBody);
             registrationEmail.setFrom("studlink.confirmation@gmail.com");
-
             emailService.sendEmail(registrationEmail);
 
             modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.getEmail());
-            modelAndView.setViewName("register");
+            modelAndView.setViewName("checkyouremail");
         }
 
         return modelAndView;
@@ -142,6 +148,17 @@ public class RegisterController {
 
         // Save user
         userService.saveUser(user);
+
+        String emailBody = "Hello " + user.getFirstName() + ",\n"
+                + "Your account was activated successfully. You can now log in with your email and password.\n"
+                + "\nThis is an automated email. Please do not reply to it. ";
+
+        SimpleMailMessage registrationEmail = new SimpleMailMessage();
+        registrationEmail.setTo(user.getEmail());
+        registrationEmail.setSubject("Your Studlink account is now active.");
+        registrationEmail.setText(emailBody);
+        registrationEmail.setFrom("studlink.confirmation@gmail.com");
+        emailService.sendEmail(registrationEmail);
 
         modelAndView.addObject("successMessage", "Your password has been set!");
         return modelAndView;

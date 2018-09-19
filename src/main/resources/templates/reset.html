@@ -1,26 +1,105 @@
 <!DOCTYPE html>
-<html xlmns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>StudLink - reset your password</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Password</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script></head>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
 </head>
+
 <body>
-<div class="container">
-    <div class="col-md-4 col-md-offset-4">
-        <form method="post" th:action="@{/access}" th:object="${user}">
-            <h3>Reset your password</h3>
-            <hr/>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" placeholder="Email" class="form-control" th:field="*{email}"/>
+ <!--
+        NAV
+    -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">STUDLINK</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href=""></a>
+                </li>
+            </ul>
+            </ul>
+            <div class="my-2 my-lg-0">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" href="register.html">Register</a>
+                    </li>
+                </ul>
             </div>
-            <div class="form-group">
-                <button class="btn btn-success" type="submit">Reset</button>
+        </div>
+    </nav>
+
+    <!--
+        HEADER
+    -->
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="d-flex justify-content-center">Reset your password</h1>
             </div>
+        </div>
+    </div>
+
+	
+    <div class="container mt-5">
+        <div class="row justify-content-sm-center">
+            <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        <form autocomplete="off" action="#" th:action="@{/reset}"
+              th:object="${user}" method="post"  role="form">
+
+
+			<div class="form-group">
+                        <label for="exampleInputEmail1">Enter your email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" th:field="*{email}">
+                        <small id="emailHelp" class="form-text text-muted">We'll send you email with new password.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Send email</button>
         </form>
+        </div>
     </div>
 </div>
+<footer>
+    <div class="container-fluid bg-dark mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mt-5 ml-5 text-white">implementation:</h2>
+            </div>
+            <div class="col-12 col-sm-6 mt-5 text-white">
+                <p class="ml-5">Front-end</p>
+                <p class="ml-5">Dawid Mohr</p>
+                <p class="ml-5">Konrad Cholewa</p>
+            </div>
+            <div class="col-12 col-sm-6 my-5 text-white">
+                <p class="ml-5">Back-end</p>
+                <p class="ml-5">Michal Drab</p>
+                <p class="ml-5">Piotr Tyrna</p>
+            </div>  
+        </div>
+    </div>
+</footer>
 </body>
+
 </html>

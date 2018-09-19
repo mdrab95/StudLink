@@ -21,9 +21,11 @@ import com.studlink.service.EmailService;
 import com.studlink.service.UserService;
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
+
 /**
- * Created by Ace on 16.07.2018.
+ * Reset password process
  */
+@Controller
 public class ResetPasswordController {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -40,7 +42,7 @@ public class ResetPasswordController {
 
     // Return reset form template
     @RequestMapping(value="/reset", method = RequestMethod.GET)
-    public ModelAndView showRegistrationPage(ModelAndView modelAndView, User user){
+    public ModelAndView showResetPasswordPage(ModelAndView modelAndView, User user){
         modelAndView.addObject("user", user);
         modelAndView.setViewName("reset");
         return modelAndView;
@@ -48,7 +50,7 @@ public class ResetPasswordController {
 
     // Process form input data
     @RequestMapping(value = "/reset", method = RequestMethod.POST)
-    public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
+    public ModelAndView processResetPasswordPage(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
 
         // Lookup user in database by e-mail
         User userExists = userService.findByEmail(user.getEmail());
@@ -57,20 +59,21 @@ public class ResetPasswordController {
 
         if (userExists != null) {
             // Generate random 36-character string token for confirmation link
-            user.setConfirmationToken(UUID.randomUUID().toString());
-
-            userService.saveUser(user);
-
+            userExists.setConfirmationToken(UUID.randomUUID().toString());
+            userService.saveUser(userExists);
             String appUrl = request.getScheme() + "://" + request.getServerName();
 
-            SimpleMailMessage registrationEmail = new SimpleMailMessage();
-            registrationEmail.setTo(user.getEmail());
-            registrationEmail.setSubject("Reset your studlink password");
-            registrationEmail.setText("To reset your password, please click the link below:\n"
-                    + appUrl + ":8080/new_password?token=" + user.getConfirmationToken());
-            registrationEmail.setFrom("studlink.confirmation@gmail.com");
+            SimpleMailMessage resetPasswordEmail = new SimpleMailMessage();
+            resetPasswordEmail.setTo(userExists.getEmail());
+            resetPasswordEmail.setSubject("Reset your studlink password");
+            resetPasswordEmail.setText("Hello " + user.getFirstName() + ",\n"
+                    + "To reset your password, please click the link below:\n"
+                    + appUrl + ":8080/new_password?token=" + userExists.getConfirmationToken()
+                    + "\nIf you didn't change your password, please contact with our support. \n "
+                    + "\nThis is an automated email. Please do not reply to it. ");
+            resetPasswordEmail.setFrom("studlink.confirmation@gmail.com");
 
-            emailService.sendEmail(registrationEmail);
+            emailService.sendEmail(resetPasswordEmail);
 
             modelAndView.addObject("confirmationMessage", "Check your email.");
         }
@@ -82,7 +85,7 @@ public class ResetPasswordController {
 
     // Process confirmation link
     @RequestMapping(value="/new_password", method = RequestMethod.GET)
-    public ModelAndView confirmRegistration(ModelAndView modelAndView, @RequestParam("token") String token) {
+    public ModelAndView setNewPassword(ModelAndView modelAndView, @RequestParam("token") String token) {
 
         User user = userService.findByConfirmationToken(token);
 
@@ -98,7 +101,7 @@ public class ResetPasswordController {
 
     // Process confirmation link
     @RequestMapping(value="/new_password", method = RequestMethod.POST)
-    public ModelAndView confirmRegistration(ModelAndView modelAndView, BindingResult bindingResult, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) {
+    public ModelAndView setNewPassword(ModelAndView modelAndView, BindingResult bindingResult, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) {
 
         modelAndView.setViewName("new_password");
 
@@ -112,7 +115,7 @@ public class ResetPasswordController {
 
             redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.");
 
-            modelAndView.setViewName("redirect:confirm?token=" + requestParams.get("token"));
+            modelAndView.setViewName("redirect:new_password?token=" + requestParams.get("token"));
             System.out.println(requestParams.get("token"));
             return modelAndView;
         }
@@ -126,6 +129,17 @@ public class ResetPasswordController {
 
         // Save user
         userService.saveUser(user);
+
+        SimpleMailMessage resetPasswordEmailConfirmation = new SimpleMailMessage();
+        resetPasswordEmailConfirmation.setTo(user.getEmail());
+        resetPasswordEmailConfirmation.setSubject("Your Studlink password has been changed");
+        resetPasswordEmailConfirmation.setText("Hello " + user.getFirstName() + ",\n"
+                + "Your Studlink password has been changed. You can use your new password the next time you login in.\n"
+                + "If you didn't change your password, please contact with our support. \n "
+                + "\nThis is an automated email. Please do not reply to it. ");
+        resetPasswordEmailConfirmation.setFrom("studlink.confirmation@gmail.com");
+
+        emailService.sendEmail(resetPasswordEmailConfirmation);
 
         modelAndView.addObject("successMessage", "Your password has been set!");
         return modelAndView;
